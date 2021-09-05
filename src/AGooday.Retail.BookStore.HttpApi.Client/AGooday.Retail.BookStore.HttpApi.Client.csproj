@@ -1,23 +1,24 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>AGooday.Retail.BookStore</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AGooday.Retail.BookStore.Application.Contracts\AGooday.Retail.BookStore.Application.Contracts.csproj" />
+    <PackageReference Include="Volo.Abp.Account.HttpApi.Client" Version="4.4.2" />
+    <PackageReference Include="Volo.Abp.Identity.HttpApi.Client" Version="4.4.2" />
+    <PackageReference Include="Volo.Abp.PermissionManagement.HttpApi.Client" Version="4.4.2" />
+    <PackageReference Include="Volo.Abp.TenantManagement.HttpApi.Client" Version="4.4.2" />
+    <PackageReference Include="Volo.Abp.FeatureManagement.HttpApi.Client" Version="4.4.2" />
+    <PackageReference Include="Volo.Abp.SettingManagement.HttpApi.Client" Version="4.4.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Volo.Abp.Account.HttpApi.Client" Version="4.4.0" />
-    <PackageReference Include="Volo.Abp.Identity.HttpApi.Client" Version="4.4.0" />
-    <PackageReference Include="Volo.Abp.PermissionManagement.HttpApi.Client" Version="4.4.0" />
-    <PackageReference Include="Volo.Abp.TenantManagement.HttpApi.Client" Version="4.4.0" />
-    <PackageReference Include="Volo.Abp.FeatureManagement.HttpApi.Client" Version="4.4.0" />
-    <PackageReference Include="Volo.Abp.SettingManagement.HttpApi.Client" Version="4.4.0" />
+    <ProjectReference Include="..\AGooday.Retail.BookStore.Application.Contracts\AGooday.Retail.BookStore.Application.Contracts.csproj" />
+    <ProjectReference Include="..\AGooday.Retail.BookStore.Application\AGooday.Retail.BookStore.Application.csproj" />
   </ItemGroup>
 
 </Project>

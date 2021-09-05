@@ -6,11 +6,13 @@ using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.SettingManagement;
+using Volo.Abp.Http.Client;
 
 namespace AGooday.Retail.BookStore
 {
     [DependsOn(
-        typeof(BookStoreApplicationContractsModule),
+        //typeof(AbpHttpClientModule), //用来创建客户端代理
+        typeof(BookStoreApplicationContractsModule),//包含应用服务接口
         typeof(AbpAccountHttpApiClientModule),
         typeof(AbpIdentityHttpApiClientModule),
         typeof(AbpPermissionManagementHttpApiClientModule),
@@ -20,13 +22,12 @@ namespace AGooday.Retail.BookStore
     )]
     public class BookStoreHttpApiClientModule : AbpModule
     {
-        public const string RemoteServiceName = "Default";
-
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
+            //创建动态客户端代理
             context.Services.AddHttpClientProxies(
                 typeof(BookStoreApplicationContractsModule).Assembly,
-                RemoteServiceName
+                BookStoreRemoteServiceConsts.RemoteServiceName
             );
         }
     }

@@ -95,11 +95,16 @@ namespace AGooday.Retail.BookStore
             }
         }
 
+        /// <summary>
+        /// 自动API控制器
+        /// 路由：总是以“ /api ”开头，继续路由路径。默认值为“ /app ”，可以配置opts => { opts.RootPath = "volosoft/book-store"; }
+        /// </summary>
         private void ConfigureConventionalControllers()
         {
             Configure<AbpAspNetCoreMvcOptions>(options =>
             {
-                options.ConventionalControllers.Create(typeof(BookStoreApplicationModule).Assembly);
+                options.ConventionalControllers.Create(typeof(BookStoreApplicationModule).Assembly,
+                    opts => { opts.RootPath = "bookstore"; });
             });
         }
 
@@ -124,7 +129,7 @@ namespace AGooday.Retail.BookStore
                 },
                 options =>
                 {
-                    options.SwaggerDoc("v1", new OpenApiInfo {Title = "BookStore API", Version = "v1"});
+                    options.SwaggerDoc("v1", new OpenApiInfo { Title = "BookStore API", Version = "v1" });
                     options.DocInclusionPredicate((docName, description) => true);
                     options.CustomSchemaIds(type => type.FullName);
                 });

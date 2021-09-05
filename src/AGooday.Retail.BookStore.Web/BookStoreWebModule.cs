@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
@@ -40,12 +40,17 @@ using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.UI;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using AGooday.Retail.BookStore.Permissions;
+using Volo.Abp.Auditing;
+using Volo.Abp.AspNetCore.Mvc;
 
 namespace AGooday.Retail.BookStore.Web
 {
     [DependsOn(
         typeof(BookStoreHttpApiModule),
         typeof(BookStoreHttpApiClientModule),
+        //typeof(BookStoreApplicationModule),
         typeof(AbpAspNetCoreAuthenticationOpenIdConnectModule),
         typeof(AbpAspNetCoreMvcClientModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule),
@@ -68,6 +73,7 @@ namespace AGooday.Retail.BookStore.Web
                     typeof(BookStoreResource),
                     typeof(BookStoreDomainSharedModule).Assembly,
                     typeof(BookStoreApplicationContractsModule).Assembly,
+                    //typeof(BookStoreApplicationModule).Assembly,
                     typeof(BookStoreWebModule).Assembly
                 );
             });
@@ -78,6 +84,7 @@ namespace AGooday.Retail.BookStore.Web
             var hostingEnvironment = context.Services.GetHostingEnvironment();
             var configuration = context.Services.GetConfiguration();
 
+            //ConfigureDbProperties();
             ConfigureBundles();
             ConfigureCache();
             ConfigureRedis(context, configuration, hostingEnvironment);
@@ -87,8 +94,26 @@ namespace AGooday.Retail.BookStore.Web
             ConfigureVirtualFileSystem(hostingEnvironment);
             ConfigureNavigationServices(configuration);
             ConfigureMultiTenancy();
+            //ConfigureAutoApiControllers();
             ConfigureSwaggerServices(context.Services);
+            ConfigureAbpAuditing();
+
+            Configure<RazorPagesOptions>(options =>
+            {
+                options.Conventions.AuthorizePage("/Books/Index", BookStorePermissions.Books.Default);
+                options.Conventions.AuthorizePage("/Books/CreateModal", BookStorePermissions.Books.Create);
+                options.Conventions.AuthorizePage("/Books/EditModal", BookStorePermissions.Books.Edit);
+            });
         }
+
+        //private static void ConfigureDbProperties()
+        //{
+        //    // Global setup DBTablePrefix, DBTablePrefix can not be null! Set to empty string if you don't want a table prefix.
+        //    Volo.Abp.Data.AbpCommonDbProperties.DbTablePrefix = BookStoreConsts.DbTablePrefix;
+        //    Volo.Abp.Data.AbpCommonDbProperties.DbSchema = BookStoreConsts.DbSchema;
+        //    //Volo.Abp.IdentityServer.AbpIdentityServerDbProperties.DbTablePrefix = BookStoreConsts.DbTablePrefix;
+        //    //Volo.Abp.IdentityServer.AbpIdentityServerDbProperties.DbSchema = BookStoreConsts.DbSchema;
+        //}
 
         private void ConfigureBundles()
         {
@@ -172,8 +197,15 @@ namespace AGooday.Retail.BookStore.Web
             {
                 Configure<AbpVirtualFileSystemOptions>(options =>
                 {
-                    options.FileSets.ReplaceEmbeddedByPhysical<BookStoreDomainSharedModule>(Path.Combine(hostingEnvironment.ContentRootPath, $"..{Path.DirectorySeparatorChar}AGooday.Retail.BookStore.Domain"));
-                    options.FileSets.ReplaceEmbeddedByPhysical<BookStoreApplicationContractsModule>(Path.Combine(hostingEnvironment.ContentRootPath, $"..{Path.DirectorySeparatorChar}AGooday.Retail.BookStore.Application.Contracts"));
+                    options.FileSets.ReplaceEmbeddedByPhysical<BookStoreDomainSharedModule>(
+                        Path.Combine(hostingEnvironment.ContentRootPath, 
+                        $"..{Path.DirectorySeparatorChar}AGooday.Retail.BookStore.Domain"));
+                    options.FileSets.ReplaceEmbeddedByPhysical<BookStoreApplicationContractsModule>(
+                        Path.Combine(hostingEnvironment.ContentRootPath, 
+                        $"..{Path.DirectorySeparatorChar}AGooday.Retail.BookStore.Application.Contracts"));
+                    //options.FileSets.ReplaceEmbeddedByPhysical<BookStoreApplicationModule>(
+                    //    Path.Combine(hostingEnvironment.ContentRootPath, 
+                    //    $"..{Path.DirectorySeparatorChar}AGooday.Retail.BookStore.Application"));
                     options.FileSets.ReplaceEmbeddedByPhysical<BookStoreWebModule>(hostingEnvironment.ContentRootPath);
                 });
             }
@@ -191,6 +223,14 @@ namespace AGooday.Retail.BookStore.Web
                 options.Contributors.Add(new BookStoreToolbarContributor());
             });
         }
+
+        //private void ConfigureAutoApiControllers()
+        //{
+        //    Configure<AbpAspNetCoreMvcOptions>(options =>
+        //    {
+        //        options.ConventionalControllers.Create(typeof(BookStoreApplicationModule).Assembly);
+        //    });
+        //}
 
         private void ConfigureSwaggerServices(IServiceCollection services)
         {
@@ -216,6 +256,16 @@ namespace AGooday.Retail.BookStore.Web
                     .AddDataProtection()
                     .PersistKeysToStackExchangeRedis(redis, "BookStore-Protection-Keys");
             }
+        }
+        private void ConfigureAbpAuditing()
+        {
+            Configure<AbpAuditingOptions>(options =>
+            {
+                options.ApplicationName = "BookStore";
+                options.IsEnabledForGetRequests = true;
+                //options.IgnoredTypes.Add(typeof(Books.Book));
+                options.EntityHistorySelectors.AddAllEntities();
+            });
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
