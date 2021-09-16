@@ -11,6 +11,11 @@ using Volo.Abp.Domain.Repositories;
 
 namespace AGooday.Retail.BookStore.Authors
 {
+    /// <summary>
+    /// AuthorAppService实现
+    /// 
+    /// 需要继承ApplicationService(BookStoreAppService继承ApplicationService)，然后实现IAuthorAppService接口
+    /// </summary>
     [Authorize(BookStorePermissions.Authors.Default)]
     public class AuthorAppService : BookStoreAppService, IAuthorAppService
     {

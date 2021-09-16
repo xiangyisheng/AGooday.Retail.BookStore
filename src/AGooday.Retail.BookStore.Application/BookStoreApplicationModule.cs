@@ -25,7 +25,13 @@ namespace AGooday.Retail.BookStore
         {
             Configure<AbpAutoMapperOptions>(options =>
             {
+                //AddMaps 注册给定类的程序集中所有的配置类,通常使用模块类. 它还会注册 attribute 映射.
+                //https://docs.automapper.org/en/stable/Attribute-mapping.html
                 options.AddMaps<BookStoreApplicationModule>();
+
+                //如果你有多个配置文件,并且只需要为其中几个启用验证,那么首先使用AddMaps而不进行验证,
+                //然后为你想要验证的每个配置文件使用AddProfile.
+                options.AddProfile<BookStoreApplicationAutoMapperProfile>(validate: true);
             });
         }
     }

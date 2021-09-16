@@ -18,6 +18,9 @@ using Volo.Abp.TenantManagement.EntityFrameworkCore;
 
 namespace AGooday.Retail.BookStore.EntityFrameworkCore
 {
+    /// <summary>
+    /// 数据上下文
+    /// </summary>
     [ReplaceDbContext(typeof(IIdentityDbContext))]
     [ReplaceDbContext(typeof(ITenantManagementDbContext))]
     [ConnectionStringName("Default")]
@@ -59,6 +62,10 @@ namespace AGooday.Retail.BookStore.EntityFrameworkCore
 
         public DbSet<Author> Authors { get; set; }
 
+        /// <summary>
+        /// 数据上下文构造函数
+        /// </summary>
+        /// <param name="options"></param>
         public BookStoreDbContext(DbContextOptions<BookStoreDbContext> options)
             : base(options)
         {
@@ -100,7 +107,8 @@ namespace AGooday.Retail.BookStore.EntityFrameworkCore
                 b.ToTable(BookStoreConsts.DbTablePrefix + "Books",
                     BookStoreConsts.DbSchema);
                 b.ConfigureByConvention(); //auto configure for the base class props
-                b.Property(x => x.Name).IsRequired().HasMaxLength(128);
+                b.Property(x => x.Name).IsRequired().HasMaxLength(BookConsts.MaxNameLength);
+                b.Property(x => x.Description).IsRequired().HasMaxLength(BookConsts.MaxDescriptionLength);
 
                 b.HasOne<Author>().WithMany().HasForeignKey(x => x.AuthorId).IsRequired();
             });

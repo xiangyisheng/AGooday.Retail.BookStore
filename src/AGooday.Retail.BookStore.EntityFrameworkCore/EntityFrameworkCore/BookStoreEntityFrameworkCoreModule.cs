@@ -32,8 +32,13 @@ namespace AGooday.Retail.BookStore.EntityFrameworkCore
             BookStoreEfCoreEntityExtensionMappings.Configure();
         }
 
+        /// <summary>
+        /// 依赖注入
+        /// </summary>
+        /// <param name="context"></param>
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
+            // 注册数据上下文
             context.Services.AddAbpDbContext<BookStoreDbContext>(options =>
             {
                 /* Remove "includeAllEntities: true" to create
@@ -41,6 +46,7 @@ namespace AGooday.Retail.BookStore.EntityFrameworkCore
                 options.AddDefaultRepositories(includeAllEntities: true);
             });
 
+            // 注册SQLServer
             Configure<AbpDbContextOptions>(options =>
             {
                 /* The main point to change your DBMS.

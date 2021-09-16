@@ -47,6 +47,10 @@ using Volo.Abp.AspNetCore.Mvc;
 
 namespace AGooday.Retail.BookStore.Web
 {
+    /// <summary>
+    /// 继承自：AbpModule
+    /// 还需要依赖于AbpVNext的MVC和Autofac等模块
+    /// </summary>
     [DependsOn(
         typeof(BookStoreHttpApiModule),
         typeof(BookStoreHttpApiClientModule),
@@ -79,6 +83,10 @@ namespace AGooday.Retail.BookStore.Web
             });
         }
 
+        /// <summary>
+        /// 用作依赖注入
+        /// </summary>
+        /// <param name="context"></param>
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var hostingEnvironment = context.Services.GetHostingEnvironment();
@@ -106,6 +114,7 @@ namespace AGooday.Retail.BookStore.Web
             });
         }
 
+        #region Configure
         //private static void ConfigureDbProperties()
         //{
         //    // Global setup DBTablePrefix, DBTablePrefix can not be null! Set to empty string if you don't want a table prefix.
@@ -198,10 +207,10 @@ namespace AGooday.Retail.BookStore.Web
                 Configure<AbpVirtualFileSystemOptions>(options =>
                 {
                     options.FileSets.ReplaceEmbeddedByPhysical<BookStoreDomainSharedModule>(
-                        Path.Combine(hostingEnvironment.ContentRootPath, 
+                        Path.Combine(hostingEnvironment.ContentRootPath,
                         $"..{Path.DirectorySeparatorChar}AGooday.Retail.BookStore.Domain"));
                     options.FileSets.ReplaceEmbeddedByPhysical<BookStoreApplicationContractsModule>(
-                        Path.Combine(hostingEnvironment.ContentRootPath, 
+                        Path.Combine(hostingEnvironment.ContentRootPath,
                         $"..{Path.DirectorySeparatorChar}AGooday.Retail.BookStore.Application.Contracts"));
                     //options.FileSets.ReplaceEmbeddedByPhysical<BookStoreApplicationModule>(
                     //    Path.Combine(hostingEnvironment.ContentRootPath, 
@@ -267,7 +276,12 @@ namespace AGooday.Retail.BookStore.Web
                 options.EntityHistorySelectors.AddAllEntities();
             });
         }
+        #endregion
 
+        /// <summary>
+        /// 用来注册中间件
+        /// </summary>
+        /// <param name="context"></param>
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             var app = context.GetApplicationBuilder();

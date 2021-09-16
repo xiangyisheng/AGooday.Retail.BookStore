@@ -16,6 +16,9 @@ using Volo.Abp.TenantManagement;
 
 namespace AGooday.Retail.BookStore
 {
+    /// <summary>
+    /// 引入模块
+    /// </summary>
     [DependsOn(
         typeof(BookStoreDomainSharedModule),
         typeof(AbpAuditLoggingDomainModule),

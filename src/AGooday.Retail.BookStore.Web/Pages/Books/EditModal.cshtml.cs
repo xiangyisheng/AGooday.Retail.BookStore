@@ -57,7 +57,7 @@ namespace AGooday.Retail.BookStore.Web.Pages.Books
             public Guid AuthorId { get; set; }
 
             [Required]
-            [StringLength(128)]
+            [StringLength(BookConsts.MaxNameLength)]
             public string Name { get; set; }
 
             [Required]
@@ -66,6 +66,10 @@ namespace AGooday.Retail.BookStore.Web.Pages.Books
             [Required]
             [DataType(DataType.Date)]
             public DateTime PublishDate { get; set; } = DateTime.Now;
+
+            [Required]
+            [StringLength(BookConsts.MaxDescriptionLength)]
+            public string Description { get; set; }
 
             [Required]
             public float Price { get; set; }

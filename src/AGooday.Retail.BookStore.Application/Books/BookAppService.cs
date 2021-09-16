@@ -57,6 +57,7 @@ namespace AGooday.Retail.BookStore.Books
                 throw new EntityNotFoundException(typeof(Book), id);
             }
 
+            //ObjectMapper 属性在 ApplicationService 基类中属性注入。Map方法有两个泛型参数: 第一个是源对象类型,第二个是目标对象类型.
             var bookDto = ObjectMapper.Map<Book, BookDto>(queryResult.book);
             bookDto.AuthorName = queryResult.author.Name;
             return bookDto;

@@ -119,8 +119,15 @@ namespace AGooday.Retail.BookStore
                 });
         }
 
+        /// <summary>
+        /// 引入命名空间 Microsoft.OpenApi.Models;
+        /// 配置Swagger中间件（注册 Swagger 服务）
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="configuration"></param>
         private static void ConfigureSwaggerServices(ServiceConfigurationContext context, IConfiguration configuration)
         {
+            //注册Swagger并开启JWT(OAuth)
             context.Services.AddAbpSwaggerGenWithOAuth(
                 configuration["AuthServer:Authority"],
                 new Dictionary<string, string>
@@ -129,9 +136,36 @@ namespace AGooday.Retail.BookStore
                 },
                 options =>
                 {
-                    options.SwaggerDoc("v1", new OpenApiInfo { Title = "BookStore API", Version = "v1" });
+                    options.SwaggerDoc("v1", new OpenApiInfo
+                    {
+                        Title = "BookStore API", //标题
+                        Version = "v1", //版本
+                        //Description = "BookStore API",//描述
+                        //Contact = new Microsoft.OpenApi.Models.OpenApiContact
+                        //{
+                        //    Name = "BookStore",
+                        //    Email = "bookstore@ag.com"
+                        //}//联系
+                        //License=new OpenApiLicense
+                        //{
+                        //    Name = "许可证",
+                        //    Url = new Uri("http://www.agooday.com/bookstore")
+                        //}//许可证
+                    });
                     options.DocInclusionPredicate((docName, description) => true);
                     options.CustomSchemaIds(type => type.FullName);
+
+                    #region 启用XML注释
+                    ////<GenerateDocumentationFile>true</GenerateDocumentationFile>
+                    ////<NoWarn>$(NoWarn);1591</NoWarn>
+                    //#region 读取xml信息
+                    //   // 使用反射获取xml文件，并构造出文件的路径
+                    //   var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                    //var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                    //// 启用xml注释，该方法第二个参数启用控制器的注释，默认为false.
+                    //options.IncludeXmlComments(xmlPath, true);
+                    //#endregion 
+                    #endregion
                 });
         }
 
@@ -225,10 +259,17 @@ namespace AGooday.Retail.BookStore
 
             app.UseAuthorization();
 
+            //启用Swagger中间件
             app.UseSwagger();
+            //配置SwaggerUI
             app.UseAbpSwaggerUI(options =>
             {
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "BookStore API");
+                //options.RoutePrefix = "";//设置路由前缀
+                //options.HeadContent = "";//设置头部内容
+                //options.DocumentTitle = "";//设置文档标题
+                //https://github.com/swagger-api/swagger-ui/blob/master/dist/index.html
+                //options.IndexStream = () => GetType().GetTypeInfo().Assembly.GetManifestResourceStream("BsAPI.Swagger.index.html");
 
                 var configuration = context.GetConfiguration();
                 options.OAuthClientId(configuration["AuthServer:SwaggerClientId"]);

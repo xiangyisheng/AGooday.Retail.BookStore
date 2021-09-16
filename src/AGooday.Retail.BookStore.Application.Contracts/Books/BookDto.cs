@@ -17,6 +17,8 @@ namespace AGooday.Retail.BookStore.Books
 
         public DateTime PublishDate { get; set; }
 
+        public string Description { get; set; }
+
         public float Price { get; set; }
     }
 }
