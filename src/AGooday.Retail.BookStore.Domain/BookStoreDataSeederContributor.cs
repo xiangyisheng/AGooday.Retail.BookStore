@@ -58,6 +58,7 @@ namespace AGooday.Retail.BookStore
                     Name = "1984",
                     Type = BookType.Dystopia,
                     PublishDate = new DateTime(1949, 6, 8),
+                    Description = "1984 is a political satirical novel created by British writer George Orwell. It was created in 1948 and published in 1949. The book describes a suffocating and frightening hypothetical future totalitarian society with the ultimate goal of chasing power. Through the description of the life of an ordinary person Winston Smith in this society, it projects the essence of totalitarianism in real life.",
                     Price = 19.84f
                 },
                 autoSave: true
@@ -70,6 +71,7 @@ namespace AGooday.Retail.BookStore
                     Name = "The Hitchhiker's Guide to the Galaxy",
                     Type = BookType.ScienceFiction,
                     PublishDate = new DateTime(1995, 9, 27),
+                    Description= "Mere seconds before the Earth is to be demolished by an alien construction crew, journeyman Arthur Dent is swept off the planet by his friend Ford Prefect, a researcher penning a new edition of \"The Hitchhiker's Guide to the Galaxy.\"",
                     Price = 42.0f
                 },
                 autoSave: true

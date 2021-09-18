@@ -31,6 +31,7 @@ using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.UI;
 using Volo.Abp.VirtualFileSystem;
+using Volo.Abp.Account.Localization;
 
 namespace AGooday.Retail.BookStore
 {
@@ -62,6 +63,7 @@ namespace AGooday.Retail.BookStore
                     .Get<BookStoreResource>()
                     .AddBaseTypes(
                         typeof(AbpUiResource)
+                        , typeof(AccountResource)
                     );
 
                 options.Languages.Add(new LanguageInfo("ar", "ar", "العربية"));

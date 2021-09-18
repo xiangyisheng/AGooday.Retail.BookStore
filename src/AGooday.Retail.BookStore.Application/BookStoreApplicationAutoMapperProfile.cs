@@ -20,8 +20,16 @@ namespace AGooday.Retail.BookStore
              * into multiple profile classes for a better organization. */
 
             //让领域模型和视图模型产生关联
-            CreateMap<Book, BookDto>();
-            CreateMap<CreateUpdateBookDto, Book>();
+            CreateMap<Book, BookDto>()
+                .ForMember(x => x.AuthorName, opt => opt.Ignore());
+            CreateMap<CreateUpdateBookDto, Book>()
+                .ForMember(x => x.LastModificationTime, opt => opt.Ignore())
+                .ForMember(x => x.LastModifierId, opt => opt.Ignore())
+                .ForMember(x => x.CreationTime, opt => opt.Ignore())
+                .ForMember(x => x.CreatorId, opt => opt.Ignore())
+                .ForMember(x => x.ExtraProperties, opt => opt.Ignore())
+                .ForMember(x => x.ConcurrencyStamp, opt => opt.Ignore())
+                .ForMember(x => x.Id, opt => opt.Ignore());
 
             CreateMap<Author, AuthorDto>();
 
