@@ -23,7 +23,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AGooday.Retail.BookStore.Ht
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AGooday.Retail.BookStore.HttpApi.Client", "src\AGooday.Retail.BookStore.HttpApi.Client\AGooday.Retail.BookStore.HttpApi.Client.csproj", "{3B5A0094-670D-4BB1-BFDD-61B88A8773DC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AGooday.Retail.BookStore.Web", "src\AGooday.Retail.BookStore.Web\AGooday.Retail.BookStore.Web.csproj", "{6FE54035-9C11-4702-A5E2-D16F23101468}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AGooday.Retail.BookStore.Web.Razor", "src\AGooday.Retail.BookStore.Web.Razor\AGooday.Retail.BookStore.Web.Razor.csproj", "{6FE54035-9C11-4702-A5E2-D16F23101468}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AGooday.Retail.BookStore.IdentityServer", "src\AGooday.Retail.BookStore.IdentityServer\AGooday.Retail.BookStore.IdentityServer.csproj", "{073C361E-B8F4-49F5-93CC-72A3FF49C026}"
 EndProject
