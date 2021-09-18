@@ -12,8 +12,8 @@ namespace AGooday.Retail.BookStore.Web.Razor
         /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
-            // 注册模块=>和BookStoreWebModule产生关联
-            services.AddApplication<BookStoreWebModule>();
+            // 注册模块=>和BookStoreWebRazorModule产生关联
+            services.AddApplication<BookStoreWebRazorModule>();
         }
 
         /// <summary>

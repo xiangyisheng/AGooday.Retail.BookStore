@@ -67,7 +67,7 @@ namespace AGooday.Retail.BookStore.Web.Razor
         typeof(AbpAspNetCoreSerilogModule),
         typeof(AbpSwashbuckleModule)
         )]
-    public class BookStoreWebModule : AbpModule
+    public class BookStoreWebRazorModule : AbpModule
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
@@ -78,7 +78,7 @@ namespace AGooday.Retail.BookStore.Web.Razor
                     typeof(BookStoreDomainSharedModule).Assembly,
                     typeof(BookStoreApplicationContractsModule).Assembly,
                     //typeof(BookStoreApplicationModule).Assembly,
-                    typeof(BookStoreWebModule).Assembly
+                    typeof(BookStoreWebRazorModule).Assembly
                 );
             });
         }
@@ -196,7 +196,7 @@ namespace AGooday.Retail.BookStore.Web.Razor
         {
             Configure<AbpAutoMapperOptions>(options =>
             {
-                options.AddMaps<BookStoreWebModule>();
+                options.AddMaps<BookStoreWebRazorModule>();
             });
         }
 
@@ -215,7 +215,7 @@ namespace AGooday.Retail.BookStore.Web.Razor
                     //options.FileSets.ReplaceEmbeddedByPhysical<BookStoreApplicationModule>(
                     //    Path.Combine(hostingEnvironment.ContentRootPath, 
                     //    $"..{Path.DirectorySeparatorChar}AGooday.Retail.BookStore.Application"));
-                    options.FileSets.ReplaceEmbeddedByPhysical<BookStoreWebModule>(hostingEnvironment.ContentRootPath);
+                    options.FileSets.ReplaceEmbeddedByPhysical<BookStoreWebRazorModule>(hostingEnvironment.ContentRootPath);
                 });
             }
         }

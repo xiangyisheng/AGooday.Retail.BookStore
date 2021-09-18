@@ -4,9 +4,9 @@ using AutoMapper;
 
 namespace AGooday.Retail.BookStore.Web.Razor
 {
-    public class BookStoreWebAutoMapperProfile : Profile
+    public class BookStoreWebRazorAutoMapperProfile : Profile
     {
-        public BookStoreWebAutoMapperProfile()
+        public BookStoreWebRazorAutoMapperProfile()
         {
             //Define your AutoMapper configuration here for the Web project.
 
