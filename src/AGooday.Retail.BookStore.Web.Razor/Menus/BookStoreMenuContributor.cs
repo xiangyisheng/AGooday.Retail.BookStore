@@ -36,7 +36,7 @@ namespace AGooday.Retail.BookStore.Web.Razor.Menus
             }
         }
 
-        private async Task ConfigureMainMenuAsync(MenuConfigurationContext context)
+        private Task ConfigureMainMenuAsync(MenuConfigurationContext context)
         {
             var administration = context.Menu.GetAdministration();
             var l = context.GetLocalizer<BookStoreResource>();
@@ -50,33 +50,46 @@ namespace AGooday.Retail.BookStore.Web.Razor.Menus
                     icon: "fas fa-home",
                     order: 0
                 )
-            ); 
+            );
 
             var bookStoreMenu = new ApplicationMenuItem(
-                "BooksStore",
+                BookStorePermissions.GroupName,
                 l["Menu:BookStore"],
                 icon: "fa fa-book"
             );
+
+            bookStoreMenu.AddItem(new ApplicationMenuItem(
+                BookStorePermissions.Books.Default,
+                l["Menu:Books"],
+                url: "/Books").RequirePermissions(BookStorePermissions.Books.Default)
+            );
+
+            bookStoreMenu.AddItem(new ApplicationMenuItem(
+                BookStorePermissions.Authors.Default,
+                l["Menu:Authors"],
+                url: "/Authors").RequirePermissions(BookStorePermissions.Authors.Default)
+            );
+
             context.Menu.AddItem(bookStoreMenu);
 
-            //CHECK the PERMISSION
-            if (await context.IsGrantedAsync(BookStorePermissions.Books.Default))
-            {
-                bookStoreMenu.AddItem(new ApplicationMenuItem(
-                    "BooksStore.Books",
-                    l["Menu:Books"],
-                    url: "/Books"
-                ));
-            }
+            ////CHECK the PERMISSION
+            //if (await context.IsGrantedAsync(BookStorePermissions.Books.Default))
+            //{
+            //    bookStoreMenu.AddItem(new ApplicationMenuItem(
+            //        BookStorePermissions.Books.Default,
+            //        l["Menu:Books"],
+            //        url: "/Books"
+            //    ));
+            //}
 
-            if (await context.IsGrantedAsync(BookStorePermissions.Authors.Default))
-            {
-                bookStoreMenu.AddItem(new ApplicationMenuItem(
-                    "BooksStore.Authors",
-                    l["Menu:Authors"],
-                    url: "/Authors"
-                ));
-            }
+            //if (await context.IsGrantedAsync(BookStorePermissions.Authors.Default))
+            //{
+            //    bookStoreMenu.AddItem(new ApplicationMenuItem(
+            //        BookStorePermissions.Authors.Default,
+            //        l["Menu:Authors"],
+            //        url: "/Authors"
+            //    ));
+            //}
 
             if (MultiTenancyConsts.IsEnabled)
             {
@@ -90,7 +103,7 @@ namespace AGooday.Retail.BookStore.Web.Razor.Menus
             administration.SetSubItemOrder(IdentityMenuNames.GroupName, 2);
             administration.SetSubItemOrder(SettingManagementMenuNames.GroupName, 3);
 
-            //return Task.CompletedTask;
+            return Task.CompletedTask;
         }
 
         private Task ConfigureUserMenuAsync(MenuConfigurationContext context)
