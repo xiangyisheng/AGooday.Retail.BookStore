@@ -44,6 +44,12 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using AGooday.Retail.BookStore.Permissions;
 using Volo.Abp.Auditing;
 using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.AspNetCore.Mvc.UI.Components.LayoutHook;
+using AGooday.Retail.BookStore.Web.Components.GoogleAnalytics;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.PageToolbars;
+using Volo.Abp.Localization;
+using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button;
+using AGooday.Retail.BookStore.Web.Pages.Identity.Users.ClickMeToolbarItem;
 
 namespace AGooday.Retail.BookStore.Web.Razor
 {
@@ -100,7 +106,9 @@ namespace AGooday.Retail.BookStore.Web.Razor
             ConfigureAuthentication(context, configuration);
             ConfigureAutoMapper();
             ConfigureVirtualFileSystem(hostingEnvironment);
-            ConfigureNavigationServices(configuration);
+            ConfigureNavigation(configuration);
+            ConfigureLayoutHook();
+            ConfigurePageToolbar();
             ConfigureMultiTenancy();
             //ConfigureAutoApiControllers();
             ConfigureSwaggerServices(context.Services);
@@ -135,6 +143,13 @@ namespace AGooday.Retail.BookStore.Web.Razor
                         bundle.AddFiles("/global-styles.css");
                     }
                 );
+
+                options.ScriptBundles.Configure(
+                    typeof(Volo.Abp.Identity.Web.Pages.Identity.Users.IndexModel).FullName,
+                    bundle =>
+                    {
+                        bundle.AddFiles("/Pages/Identity/Users/user-extensions.js");
+                    });
             });
         }
 
@@ -220,7 +235,7 @@ namespace AGooday.Retail.BookStore.Web.Razor
             }
         }
 
-        private void ConfigureNavigationServices(IConfiguration configuration)
+        private void ConfigureNavigation(IConfiguration configuration)
         {
             Configure<AbpNavigationOptions>(options =>
             {
@@ -230,6 +245,38 @@ namespace AGooday.Retail.BookStore.Web.Razor
             Configure<AbpToolbarOptions>(options =>
             {
                 options.Contributors.Add(new BookStoreToolbarContributor());
+            });
+        }
+
+        private void ConfigureLayoutHook()
+        {
+            Configure<AbpLayoutHookOptions>(options =>
+            {
+                options.Add(
+                    LayoutHooks.Head.Last, //The hook name
+                    typeof(GoogleAnalyticsViewComponent) //The component to add
+                );
+            });
+        }
+
+        private void ConfigurePageToolbar()
+        {
+            Configure<AbpPageToolbarOptions>(options =>
+            {
+                options.Configure<Volo.Abp.Identity.Web.Pages.Identity.Users.IndexModel>(toolbar =>
+                {
+                    //向用户管理页面添加新按钮
+                    toolbar.AddButton(
+                        LocalizableString.Create<BookStoreResource>("ImportFromExcel"),
+                        icon: "file-import",
+                        id: "ImportUsersFromExcel",
+                        type: AbpButtonType.Secondary
+                    );
+
+                    //将视图组件添加到页面工具栏
+                    //toolbar.AddComponent<ClickMeToolbarItemViewComponent>();
+                    toolbar.Contributors.Add(new Web.Pages.Identity.Users.ToolbarContributor());
+                });
             });
         }
 
