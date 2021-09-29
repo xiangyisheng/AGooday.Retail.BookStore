@@ -5,7 +5,7 @@ var clickMeAction = {
     text: 'Click Me!',
     action: function (data) {
         //TODO: Write your custom code
-        alert(data.record.userName);
+        abp.notify.info(data.record.userName);
     }
 };
 
@@ -21,7 +21,7 @@ var clickMe2Action = {
     icon: 'fas fa-hand-point-right',
     action: function (data) {
         //TODO: Write your custom code
-        alert(data.record.userName);
+        abp.notify.info(data.record.userName);
     }
 };
 
@@ -114,7 +114,7 @@ abp.ui.extensions.tableColumns
 $(function () {
     $('#ImportUsersFromExcel').click(function (e) {
         e.preventDefault();
-        alert('TODO: import users from excel');
+        abp.message.info('TODO: import users from excel');
     });
 });
 /* End Page Toolbar Extensions for ASP.NET Core UI */

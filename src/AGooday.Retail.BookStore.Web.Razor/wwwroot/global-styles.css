@@ -1,1 +1,19 @@
 ﻿/* Your Global Styles */
+.notification-indicator .mail-status.unread {
+    display: inline-block;
+}
+
+.notification-indicator .mail-status {
+    position: relative;
+    top: -6px;
+    left: -12px;
+    z-index: 2;
+    display: none;
+    width: 9px;
+    height: 9px;
+    color: #fff;
+    background-image: linear-gradient(#54a3ff, #006eed);
+    background-clip: padding-box;
+    border: 2px solid var(--color-header-bg);
+    border-radius: 50%;
+}
