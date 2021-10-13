@@ -103,8 +103,9 @@ namespace AGooday.Retail.BookStore
         {
             Configure<AbpAspNetCoreMvcOptions>(options =>
             {
-                options.ConventionalControllers.Create(typeof(BookStoreApplicationModule).Assembly,
-                    opts => { opts.RootPath = "bookstore"; });
+                options.ConventionalControllers.Create(typeof(BookStoreApplicationModule).Assembly
+                    //, opts => { opts.RootPath = "bookstore"; }
+                );
             });
         }
 

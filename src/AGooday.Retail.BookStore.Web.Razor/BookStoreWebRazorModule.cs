@@ -50,6 +50,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.PageToolbars;
 using Volo.Abp.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button;
 using AGooday.Retail.BookStore.Web.Pages.Identity.Users.ClickMeToolbarItem;
+using Volo.Abp.Http.Client;
 
 namespace AGooday.Retail.BookStore.Web.Razor
 {
@@ -112,6 +113,7 @@ namespace AGooday.Retail.BookStore.Web.Razor
             ConfigureMultiTenancy();
             //ConfigureAutoApiControllers();
             ConfigureSwaggerServices(context.Services);
+            ConfigureRemoteService(context.Services, configuration);
             ConfigureAbpAuditing();
 
             Configure<RazorPagesOptions>(options =>
@@ -298,6 +300,15 @@ namespace AGooday.Retail.BookStore.Web.Razor
                     options.CustomSchemaIds(type => type.FullName);
                 }
             );
+        }
+
+        private void ConfigureRemoteService(IServiceCollection services, IConfiguration configuration)
+        {
+            services.Configure<AbpRemoteServiceOptions>(options =>
+            {
+                options.RemoteServices.Default =
+                    new RemoteServiceConfiguration(configuration["RemoteServices:Default:BaseUrl"]);
+            });
         }
 
         private void ConfigureRedis(
