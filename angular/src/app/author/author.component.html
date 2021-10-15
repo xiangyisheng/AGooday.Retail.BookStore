@@ -53,7 +53,7 @@
       <ngx-datatable-column [name]="'::Name' | abpLocalization" prop="name"></ngx-datatable-column>
       <ngx-datatable-column [name]="'::BirthDate' | abpLocalization">
         <ng-template let-row="row" ngx-datatable-cell-template>
-          {{ row.birthDate | date }}
+          {{ row.birthDate | date:'yyyy-MM-dd' }}
         </ng-template>
       </ngx-datatable-column>
     </ngx-datatable>
@@ -68,12 +68,12 @@
   <ng-template #abpBody>
     <form id="author-form" [formGroup]="form" (ngSubmit)="save()">
       <div class="form-group">
-        <label for="author-name">Name</label><span> * </span>
+        <label for="author-name">{{'::Name' | abpLocalization}}</label><span class="red"> * </span>
         <input type="text" id="author-name" class="form-control" formControlName="name" autofocus />
       </div>
 
       <div class="form-group">
-        <label for="author-birth-date">Birth date</label><span> * </span>
+        <label for="author-birth-date">{{'::BirthDate' | abpLocalization}}</label><span class="red"> * </span>
         <input
           id="author-birth-date"
           ngbDatepicker
