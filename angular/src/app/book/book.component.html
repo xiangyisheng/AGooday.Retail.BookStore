@@ -99,7 +99,7 @@
       <div class="form-group">
         <label for="author-id">{{'::Authors' | abpLocalization}}</label><span class="red"> * </span>
         <select class="form-control" id="author-id" formControlName="authorId">
-          <option [ngValue]="null">Select author</option>
+          <option [ngValue]="null">{{{ key: '::SelectAuthor', defaultValue: 'Select author' } | abpLocalization}}</option>
           <option [ngValue]="author.id" *ngFor="let author of authors$ | async">
             {{ author.name }}
           </option>
@@ -119,7 +119,7 @@
       <div class="form-group">
         <label for="book-type">{{'::Type' | abpLocalization}}</label><span class="red"> * </span>
         <select class="form-control" id="book-type" formControlName="type">
-          <option [ngValue]="null">{{'::SelectBookType' | abpLocalization}}</option>
+          <option [ngValue]="null">{{{ key: '::SelectBookType', defaultValue: 'Select a book type' } | abpLocalization}}</option>
           <option [ngValue]="type.value" *ngFor="let type of bookTypes">{{ '::Enum:BookType:' + type.value | abpLocalization }}</option>
         </select>
       </div>
