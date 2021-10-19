@@ -37,6 +37,8 @@ namespace AGooday.Retail.BookStore.Web.Razor.Pages.Authors
         public class CreateAuthorViewModel
         {
             [Required]
+            [Placeholder("Enter author name...")]
+            [InputInfoText("What is the author's name?")]
             [StringLength(AuthorConsts.MaxNameLength)]
             public string Name { get; set; }
 

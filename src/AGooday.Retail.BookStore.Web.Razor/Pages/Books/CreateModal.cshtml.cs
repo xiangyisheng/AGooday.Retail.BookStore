@@ -48,10 +48,11 @@ namespace AGooday.Retail.BookStore.Web.Razor.Pages.Books
         public class CreateBookViewModel
         {
             [SelectItems(nameof(Authors))]
-            [DisplayName("Author")]
+            [DisplayName("Authors")]
             public Guid AuthorId { get; set; }
 
             [Required]
+            [Placeholder("Enter book name...")]
             [StringLength(BookConsts.MaxNameLength)]
             public string Name { get; set; }
 
@@ -63,6 +64,8 @@ namespace AGooday.Retail.BookStore.Web.Razor.Pages.Books
             public DateTime PublishDate { get; set; } = DateTime.Now;
 
             [Required]
+            [TextArea(Rows = 4)]
+            [InputInfoText("Please write a Book Introduction")]
             [StringLength(BookConsts.MaxDescriptionLength)]
             public string Description { get; set; }
 

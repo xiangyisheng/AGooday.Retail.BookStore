@@ -6,18 +6,16 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using AGooday.Retail.BookStore.EntityFrameworkCore;
 using AGooday.Retail.BookStore.Localization;
 using AGooday.Retail.BookStore.MultiTenancy;
 using AGooday.Retail.BookStore.Web.Razor.Menus;
 using StackExchange.Redis;
 using Microsoft.OpenApi.Models;
 using Volo.Abp;
-using Volo.Abp.AspNetCore.Authentication.OpenIdConnect;
-using Volo.Abp.AspNetCore.Mvc.Client;
+using Volo.Abp.Account.Web;
+using Volo.Abp.AspNetCore.Authentication.JwtBearer;
 using Volo.Abp.AspNetCore.Mvc.Localization;
-using Volo.Abp.AspNetCore.Mvc.UI;
-using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling;
@@ -28,16 +26,13 @@ using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Caching;
 using Volo.Abp.Caching.StackExchangeRedis;
-using Volo.Abp.Http.Client.IdentityModel.Web;
 using Volo.Abp.Identity.Web;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
-using Volo.Abp.PermissionManagement.Web;
 using Volo.Abp.SettingManagement.Web;
 using Volo.Abp.Swashbuckle;
 using Volo.Abp.TenantManagement.Web;
 using Volo.Abp.UI.Navigation.Urls;
-using Volo.Abp.UI;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -49,8 +44,6 @@ using AGooday.Retail.BookStore.Web.Components.GoogleAnalytics;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.PageToolbars;
 using Volo.Abp.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Button;
-using AGooday.Retail.BookStore.Web.Pages.Identity.Users.ClickMeToolbarItem;
-using Volo.Abp.Http.Client;
 
 namespace AGooday.Retail.BookStore.Web.Razor
 {
@@ -60,16 +53,15 @@ namespace AGooday.Retail.BookStore.Web.Razor
     /// </summary>
     [DependsOn(
         typeof(BookStoreHttpApiModule),
-        typeof(BookStoreHttpApiClientModule),
-        //typeof(BookStoreApplicationModule),
-        typeof(AbpAspNetCoreAuthenticationOpenIdConnectModule),
-        typeof(AbpAspNetCoreMvcClientModule),
+        typeof(BookStoreApplicationModule),
+        typeof(BookStoreEntityFrameworkCoreModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule),
         typeof(AbpAutofacModule),
         typeof(AbpCachingStackExchangeRedisModule),
         typeof(AbpSettingManagementWebModule),
-        typeof(AbpHttpClientIdentityModelWebModule),
         typeof(AbpIdentityWebModule),
+        typeof(AbpAccountWebIdentityServerModule),
+        typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
         typeof(AbpTenantManagementWebModule),
         typeof(AbpAspNetCoreSerilogModule),
         typeof(AbpSwashbuckleModule)
@@ -82,9 +74,10 @@ namespace AGooday.Retail.BookStore.Web.Razor
             {
                 options.AddAssemblyResource(
                     typeof(BookStoreResource),
+                    typeof(BookStoreDomainModule).Assembly,
                     typeof(BookStoreDomainSharedModule).Assembly,
                     typeof(BookStoreApplicationContractsModule).Assembly,
-                    //typeof(BookStoreApplicationModule).Assembly,
+                    typeof(BookStoreApplicationModule).Assembly,
                     typeof(BookStoreWebRazorModule).Assembly
                 );
             });
@@ -99,7 +92,7 @@ namespace AGooday.Retail.BookStore.Web.Razor
             var hostingEnvironment = context.Services.GetHostingEnvironment();
             var configuration = context.Services.GetConfiguration();
 
-            //ConfigureDbProperties();
+            ConfigureDbProperties();
             ConfigureBundles();
             ConfigureCache();
             ConfigureRedis(context, configuration, hostingEnvironment);
@@ -107,13 +100,13 @@ namespace AGooday.Retail.BookStore.Web.Razor
             ConfigureAuthentication(context, configuration);
             ConfigureAutoMapper();
             ConfigureVirtualFileSystem(hostingEnvironment);
+            ConfigureLocalization();
             ConfigureNavigation(configuration);
             ConfigureLayoutHook();
             ConfigurePageToolbar();
             ConfigureMultiTenancy();
-            //ConfigureAutoApiControllers();
+            ConfigureAutoApiControllers();
             ConfigureSwaggerServices(context.Services);
-            ConfigureRemoteService(context.Services, configuration);
             ConfigureAbpAuditing();
 
             Configure<RazorPagesOptions>(options =>
@@ -125,14 +118,14 @@ namespace AGooday.Retail.BookStore.Web.Razor
         }
 
         #region Configure
-        //private static void ConfigureDbProperties()
-        //{
-        //    // Global setup DBTablePrefix, DBTablePrefix can not be null! Set to empty string if you don't want a table prefix.
-        //    Volo.Abp.Data.AbpCommonDbProperties.DbTablePrefix = BookStoreConsts.DbTablePrefix;
-        //    Volo.Abp.Data.AbpCommonDbProperties.DbSchema = BookStoreConsts.DbSchema;
-        //    //Volo.Abp.IdentityServer.AbpIdentityServerDbProperties.DbTablePrefix = BookStoreConsts.DbTablePrefix;
-        //    //Volo.Abp.IdentityServer.AbpIdentityServerDbProperties.DbSchema = BookStoreConsts.DbSchema;
-        //}
+        private static void ConfigureDbProperties()
+        {
+            // Global setup DBTablePrefix, DBTablePrefix can not be null! Set to empty string if you don't want a table prefix.
+            Volo.Abp.Data.AbpCommonDbProperties.DbTablePrefix = BookStoreConsts.DbTablePrefix;
+            Volo.Abp.Data.AbpCommonDbProperties.DbSchema = BookStoreConsts.DbSchema;
+            //Volo.Abp.IdentityServer.AbpIdentityServerDbProperties.DbTablePrefix = BookStoreConsts.DbTablePrefix;
+            //Volo.Abp.IdentityServer.AbpIdentityServerDbProperties.DbSchema = BookStoreConsts.DbSchema;
+        }
 
         private void ConfigureBundles()
         {
@@ -181,31 +174,12 @@ namespace AGooday.Retail.BookStore.Web.Razor
 
         private void ConfigureAuthentication(ServiceConfigurationContext context, IConfiguration configuration)
         {
-            context.Services.AddAuthentication(options =>
-                {
-                    options.DefaultScheme = "Cookies";
-                    options.DefaultChallengeScheme = "oidc";
-                })
-                .AddCookie("Cookies", options =>
-                {
-                    options.ExpireTimeSpan = TimeSpan.FromDays(365);
-                })
-                .AddAbpOpenIdConnect("oidc", options =>
+            context.Services.AddAuthentication()
+                .AddJwtBearer(options =>
                 {
                     options.Authority = configuration["AuthServer:Authority"];
                     options.RequireHttpsMetadata = Convert.ToBoolean(configuration["AuthServer:RequireHttpsMetadata"]);
-                    options.ResponseType = OpenIdConnectResponseType.CodeIdToken;
-
-                    options.ClientId = configuration["AuthServer:ClientId"];
-                    options.ClientSecret = configuration["AuthServer:ClientSecret"];
-
-                    options.SaveTokens = true;
-                    options.GetClaimsFromUserInfoEndpoint = true;
-
-                    options.Scope.Add("role");
-                    options.Scope.Add("email");
-                    options.Scope.Add("phone");
-                    options.Scope.Add("BookStore");
+                    options.Audience = "BookStore";
                 });
         }
 
@@ -224,14 +198,17 @@ namespace AGooday.Retail.BookStore.Web.Razor
                 Configure<AbpVirtualFileSystemOptions>(options =>
                 {
                     options.FileSets.ReplaceEmbeddedByPhysical<BookStoreDomainSharedModule>(
-                        Path.Combine(hostingEnvironment.ContentRootPath,
+                        Path.Combine(hostingEnvironment.ContentRootPath, 
+                        $"..{Path.DirectorySeparatorChar}AGooday.Retail.BookStore.Domain.Shared"));
+                    options.FileSets.ReplaceEmbeddedByPhysical<BookStoreDomainModule>(
+                        Path.Combine(hostingEnvironment.ContentRootPath, 
                         $"..{Path.DirectorySeparatorChar}AGooday.Retail.BookStore.Domain"));
                     options.FileSets.ReplaceEmbeddedByPhysical<BookStoreApplicationContractsModule>(
-                        Path.Combine(hostingEnvironment.ContentRootPath,
+                        Path.Combine(hostingEnvironment.ContentRootPath, 
                         $"..{Path.DirectorySeparatorChar}AGooday.Retail.BookStore.Application.Contracts"));
-                    //options.FileSets.ReplaceEmbeddedByPhysical<BookStoreApplicationModule>(
-                    //    Path.Combine(hostingEnvironment.ContentRootPath, 
-                    //    $"..{Path.DirectorySeparatorChar}AGooday.Retail.BookStore.Application"));
+                    options.FileSets.ReplaceEmbeddedByPhysical<BookStoreApplicationModule>(
+                        Path.Combine(hostingEnvironment.ContentRootPath, 
+                        $"..{Path.DirectorySeparatorChar}AGooday.Retail.BookStore.Application"));
                     options.FileSets.ReplaceEmbeddedByPhysical<BookStoreWebRazorModule>(hostingEnvironment.ContentRootPath);
                 });
             }
@@ -247,6 +224,26 @@ namespace AGooday.Retail.BookStore.Web.Razor
             Configure<AbpToolbarOptions>(options =>
             {
                 options.Contributors.Add(new BookStoreToolbarContributor());
+            });
+        }
+
+        private void ConfigureLocalization()
+        {
+            Configure<AbpLocalizationOptions>(options =>
+            {
+                options.Languages.Add(new LanguageInfo("ar", "ar", "العربية"));
+                options.Languages.Add(new LanguageInfo("cs", "cs", "Čeština"));
+                options.Languages.Add(new LanguageInfo("en", "en", "English"));
+                options.Languages.Add(new LanguageInfo("en-GB", "en-GB", "English (UK)"));
+                options.Languages.Add(new LanguageInfo("hu", "hu", "Magyar"));
+                options.Languages.Add(new LanguageInfo("fr", "fr", "Français"));
+                options.Languages.Add(new LanguageInfo("pt-BR", "pt-BR", "Português"));
+                options.Languages.Add(new LanguageInfo("ru", "ru", "Русский"));
+                options.Languages.Add(new LanguageInfo("tr", "tr", "Türkçe"));
+                options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
+                options.Languages.Add(new LanguageInfo("zh-Hant", "zh-Hant", "繁體中文"));
+                options.Languages.Add(new LanguageInfo("de-DE", "de-DE", "Deutsch", "de"));
+                options.Languages.Add(new LanguageInfo("es", "es", "Español"));
             });
         }
 
@@ -282,17 +279,17 @@ namespace AGooday.Retail.BookStore.Web.Razor
             });
         }
 
-        //private void ConfigureAutoApiControllers()
-        //{
-        //    Configure<AbpAspNetCoreMvcOptions>(options =>
-        //    {
-        //        options.ConventionalControllers.Create(typeof(BookStoreApplicationModule).Assembly);
-        //    });
-        //}
+        private void ConfigureAutoApiControllers()
+        {
+            Configure<AbpAspNetCoreMvcOptions>(options =>
+            {
+                options.ConventionalControllers.Create(typeof(BookStoreApplicationModule).Assembly);
+            });
+        }
 
         private void ConfigureSwaggerServices(IServiceCollection services)
         {
-            services.AddAbpSwaggerGen(
+            services.AddSwaggerGen(
                 options =>
                 {
                     options.SwaggerDoc("v1", new OpenApiInfo { Title = "BookStore API", Version = "v1" });
@@ -300,15 +297,6 @@ namespace AGooday.Retail.BookStore.Web.Razor
                     options.CustomSchemaIds(type => type.FullName);
                 }
             );
-        }
-
-        private void ConfigureRemoteService(IServiceCollection services, IConfiguration configuration)
-        {
-            services.Configure<AbpRemoteServiceOptions>(options =>
-            {
-                options.RemoteServices.Default =
-                    new RemoteServiceConfiguration(configuration["RemoteServices:Default:BaseUrl"]);
-            });
         }
 
         private void ConfigureRedis(
@@ -361,18 +349,22 @@ namespace AGooday.Retail.BookStore.Web.Razor
             app.UseStaticFiles();
             app.UseRouting();
             app.UseAuthentication();
+            app.UseJwtTokenMiddleware();
 
             if (MultiTenancyConsts.IsEnabled)
             {
                 app.UseMultiTenancy();
             }
 
+            app.UseUnitOfWork();
+            app.UseIdentityServer();
             app.UseAuthorization();
             app.UseSwagger();
             app.UseAbpSwaggerUI(options =>
             {
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "BookStore API");
             });
+            app.UseAuditing();
             app.UseAbpSerilogEnrichers();
             app.UseConfiguredEndpoints();
         }

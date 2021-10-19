@@ -52,7 +52,7 @@
                     data: "name"
                 },
                 {
-                    title: l('Author'),
+                    title: l('Authors'),
                     data: "authorName"
                 },
                 {

@@ -24,10 +24,10 @@ namespace AGooday.Retail.BookStore.Web.Razor.Menus
                     ); 
             }
 
-            if (!context.ServiceProvider.GetRequiredService<ICurrentUser>().IsAuthenticated)
-            {
-                context.Toolbar.Items.Add(new ToolbarItem(typeof(LoginLinkViewComponent)));
-            }
+            //if (!context.ServiceProvider.GetRequiredService<ICurrentUser>().IsAuthenticated)
+            //{
+            //    context.Toolbar.Items.Add(new ToolbarItem(typeof(LoginLinkViewComponent)));
+            //}
 
             return Task.CompletedTask;
         }

@@ -53,10 +53,11 @@ namespace AGooday.Retail.BookStore.Web.Razor.Pages.Books
             public Guid Id { get; set; }
 
             [SelectItems(nameof(Authors))]
-            [DisplayName("Author")]
+            [DisplayName("Authors")]
             public Guid AuthorId { get; set; }
 
             [Required]
+            [Placeholder("Enter book name...")]
             [StringLength(BookConsts.MaxNameLength)]
             public string Name { get; set; }
 
@@ -64,10 +65,14 @@ namespace AGooday.Retail.BookStore.Web.Razor.Pages.Books
             public BookType Type { get; set; } = BookType.Undefined;
 
             [Required]
-            [DataType(DataType.Date)]
+            [DataType(DataType.Date), DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+            //[DataType(DataType.Date)]
+            //[DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
             public DateTime PublishDate { get; set; } = DateTime.Now;
 
             [Required]
+            [TextArea(Rows = 4)]
+            [InputInfoText("Please write a Book Introduction")]
             [StringLength(BookConsts.MaxDescriptionLength)]
             public string Description { get; set; }
 
