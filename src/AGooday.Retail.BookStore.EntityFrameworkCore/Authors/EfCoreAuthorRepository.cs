@@ -39,9 +39,10 @@ namespace AGooday.Retail.BookStore.Authors
                     !filter.IsNullOrWhiteSpace(),
                     author => author.Name.Contains(filter)
                 )
-                .OrderBy(sorting)
-                .Skip(skipCount)
-                .Take(maxResultCount)
+                .OrderBy(sorting.IsNullOrWhiteSpace() ? $"{nameof(Author.CreationTime)} desc" : sorting)
+                .PageBy(skipCount,maxResultCount)
+                //.Skip(skipCount)
+                //.Take(maxResultCount)
                 .ToListAsync();
         }
     }
