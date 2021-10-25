@@ -6,11 +6,16 @@ using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities.Auditing;
+using Volo.Abp.MultiTenancy;
 
 namespace AGooday.Retail.BookStore.Authors
 {
-    public class Author : FullAuditedAggregateRoot<Guid>
+    public class Author : FullAuditedAggregateRoot<Guid>, IMultiTenant
     {
+        /// <summary>
+        /// 租户ID
+        /// </summary>
+        public Guid? TenantId { get; set; } //Defined by the IMultiTenant interface
         public string Name { get; private set; }
         public DateTime BirthDate { get; set; }
         public string ShortBio { get; set; }
