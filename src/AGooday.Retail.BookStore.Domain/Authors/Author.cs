@@ -27,14 +27,18 @@ namespace AGooday.Retail.BookStore.Authors
 
         internal Author(
             Guid id,
+            Guid? tenantId,
             [NotNull] string name,
             DateTime birthDate,
-            [CanBeNull] string shortBio = null)
+            [CanBeNull] string shortBio = null,
+            Guid? creatorId = null)
             : base(id)
         {
+            TenantId = tenantId;
             SetName(name);
             BirthDate = birthDate;
             ShortBio = shortBio;
+            CreatorId = creatorId;
         }
 
         internal Author ChangeName([NotNull] string name)

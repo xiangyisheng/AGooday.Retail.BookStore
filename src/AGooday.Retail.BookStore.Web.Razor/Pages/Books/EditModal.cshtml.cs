@@ -39,10 +39,8 @@ namespace AGooday.Retail.BookStore.Web.Razor.Pages.Books
 
         public async Task<IActionResult> OnPostAsync()
         {
-            await _bookAppService.UpdateAsync(
-                Book.Id,
-                ObjectMapper.Map<EditBookViewModel, CreateUpdateBookDto>(Book)
-            );
+            var dto = ObjectMapper.Map<EditBookViewModel, CreateUpdateBookDto>(Book);
+            await _bookAppService.UpdateAsync(Book.Id, dto);
 
             return NoContent();
         }

@@ -99,6 +99,33 @@ namespace AGooday.Retail.BookStore.Books
             );
         }
 
+        public override async Task<BookDto> CreateAsync(CreateUpdateBookDto input)
+        {
+            //input.CreatorId = CurrentUser.Id;
+            //return await base.CreateAsync(input);
+
+            var entity = ObjectMapper.Map<CreateUpdateBookDto, Book>(input);
+            entity.CreatorId = CurrentUser.Id;
+            TryToSetTenantId(entity);
+            var book = await Repository.InsertAsync(entity);
+
+            return ObjectMapper.Map<Book, BookDto>(book);
+        }
+
+        public override async Task<BookDto> UpdateAsync(Guid id, CreateUpdateBookDto input)
+        {
+            //input.LastModifierId = CurrentUser.Id;
+            //return await base.UpdateAsync(input);
+
+            var entity = await Repository.GetAsync(id);
+            ObjectMapper.Map(input, entity);
+            //entity.LastModificationTime = DateTime.Now;
+            //entity.LastModifierId = CurrentUser.Id;
+            var book = await Repository.UpdateAsync(entity);
+
+            return ObjectMapper.Map<Book, BookDto>(book);
+        }
+
         public async Task<ListResultDto<AuthorLookupDto>> GetAuthorLookupAsync()
         {
             var authors = await _authorRepository.GetListAsync();

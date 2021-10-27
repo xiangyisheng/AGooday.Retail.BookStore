@@ -86,7 +86,8 @@ namespace AGooday.Retail.BookStore.Authors
 
             author.BirthDate = input.BirthDate;
             author.ShortBio = input.ShortBio;
-
+            author.LastModifierId = CurrentUser.Id;
+            author.LastModificationTime = DateTime.Now;
             await _authorRepository.UpdateAsync(author);
         }
 

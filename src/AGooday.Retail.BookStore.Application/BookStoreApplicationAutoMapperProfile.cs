@@ -29,7 +29,9 @@ namespace AGooday.Retail.BookStore
                 .ForMember(x => x.CreatorId, opt => opt.Ignore())
                 .ForMember(x => x.ExtraProperties, opt => opt.Ignore())
                 .ForMember(x => x.ConcurrencyStamp, opt => opt.Ignore())
-                .ForMember(x => x.Id, opt => opt.Ignore());
+                .ForMember(x => x.Id, opt => opt.Ignore())
+                .ForMember(x => x.TenantId, opt => opt.Ignore())
+                ;
 
             CreateMap<Author, AuthorDto>();
 

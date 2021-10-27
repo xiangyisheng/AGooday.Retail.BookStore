@@ -13,6 +13,7 @@
     "NewBook": "创建新图书",
     "Name": "名称",
     "Type": "类型",
+    "Description": "描述",
     "Price": "价格",
     "CreationTime": "创建时间",
     "AreYouSureToDelete": "你确定要删除这项吗？",

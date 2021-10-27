@@ -30,10 +30,10 @@ namespace AGooday.Retail.BookStore.Web.Razor.Menus
             {
                 await ConfigureMainMenuAsync(context);
             }
-            else if (context.Menu.Name == StandardMenus.User)
-            {
-                await ConfigureUserMenuAsync(context);
-            }
+            //else if (context.Menu.Name == StandardMenus.User)
+            //{
+            //    await ConfigureUserMenuAsync(context);
+            //}
         }
 
         private Task ConfigureMainMenuAsync(MenuConfigurationContext context)

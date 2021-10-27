@@ -6,15 +6,20 @@ using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Domain.Services;
+using Volo.Abp.Users;
 
 namespace AGooday.Retail.BookStore.Authors
 {
     public class AuthorManager : DomainService
     {
+        private readonly ICurrentUser _currentUser;
         private readonly IAuthorRepository _authorRepository;
 
-        public AuthorManager(IAuthorRepository authorRepository)
+        public AuthorManager(
+            ICurrentUser currentUser,
+            IAuthorRepository authorRepository)
         {
+            _currentUser = currentUser;
             _authorRepository = authorRepository;
         }
 
@@ -33,9 +38,11 @@ namespace AGooday.Retail.BookStore.Authors
 
             return new Author(
                 GuidGenerator.Create(),
+                CurrentTenant.Id,
                 name,
                 birthDate,
-                shortBio
+                shortBio,
+                _currentUser.Id
             );
         }
 

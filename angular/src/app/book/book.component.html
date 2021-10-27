@@ -112,6 +112,11 @@
       </div>
 
       <div class="form-group">
+        <label for="book-name">{{'::Description' | abpLocalization}}</label><span class="red"> * </span>
+        <textarea type="text" rows="4" id="book-description" class="form-control" formControlName="description" autofocus></textarea>
+      </div>
+
+      <div class="form-group">
         <label for="book-price">{{'::Price' | abpLocalization}}</label><span class="red"> * </span>
         <input type="number" id="book-price" class="form-control" formControlName="price" />
       </div>
@@ -120,7 +125,7 @@
         <label for="book-type">{{'::Type' | abpLocalization}}</label><span class="red"> * </span>
         <select class="form-control" id="book-type" formControlName="type">
           <option [ngValue]="null">{{{ key: '::SelectBookType', defaultValue: 'Select a book type' } | abpLocalization}}</option>
-          <option [ngValue]="type.value" *ngFor="let type of bookTypes">{{ '::Enum:BookType:' + type.value | abpLocalization }}</option>
+          <option [ngValue]="type.value" *ngFor="let type of bookTypes">{{ '::Enum:BookType.' + type.key | abpLocalization }}</option>
         </select>
       </div>
 
@@ -135,6 +140,10 @@
           (click)="datepicker.toggle()"
         />
       </div>
+
+      <!-- <div class="form-group">
+        <pre>{{ form.value | json }}</pre>
+      </div> -->
     </form>
   </ng-template>
 
