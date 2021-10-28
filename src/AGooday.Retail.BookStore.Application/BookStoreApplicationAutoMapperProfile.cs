@@ -35,6 +35,8 @@ namespace AGooday.Retail.BookStore
 
             CreateMap<Author, AuthorDto>();
 
+            CreateMap<Author, AuthorPageListOutputDto>();
+
             CreateMap<Author, AuthorLookupDto>();
         }
     }

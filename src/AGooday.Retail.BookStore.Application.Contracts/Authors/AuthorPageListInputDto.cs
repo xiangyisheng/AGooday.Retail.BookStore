@@ -5,7 +5,7 @@ using Volo.Abp.Application.Dtos;
 
 namespace AGooday.Retail.BookStore.Authors
 {
-    public class GetAuthorListDto : PagedAndSortedResultRequestDto
+    public class AuthorPageListInputDto : PagedAndSortedResultRequestDto
     {
         public string Filter { get; set; }
     }

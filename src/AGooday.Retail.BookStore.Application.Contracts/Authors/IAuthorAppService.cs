@@ -11,7 +11,7 @@ namespace AGooday.Retail.BookStore.Authors
     {
         Task<AuthorDto> GetAsync(Guid id);
 
-        Task<PagedResultDto<AuthorDto>> GetListAsync(GetAuthorListDto input);
+        Task<PagedResultDto<AuthorPageListOutputDto>> GetListAsync(AuthorPageListInputDto input);
 
         Task<AuthorDto> CreateAsync(CreateAuthorDto input);
 

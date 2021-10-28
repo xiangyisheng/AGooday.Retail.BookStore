@@ -36,7 +36,7 @@ namespace AGooday.Retail.BookStore.Authors
             return ObjectMapper.Map<Author, AuthorDto>(author);
         }
 
-        public async Task<PagedResultDto<AuthorDto>> GetListAsync(GetAuthorListDto input)
+        public async Task<PagedResultDto<AuthorPageListOutputDto>> GetListAsync(AuthorPageListInputDto input)
         {
             if (input.Sorting.IsNullOrWhiteSpace())
             {
@@ -54,10 +54,9 @@ namespace AGooday.Retail.BookStore.Authors
                 ? await _authorRepository.CountAsync()
                 : await _authorRepository.CountAsync(author => author.Name.Contains(input.Filter));
 
-            return new PagedResultDto<AuthorDto>(
+            return new PagedResultDto<AuthorPageListOutputDto>(
                 totalCount,
-                ObjectMapper.Map<List<Author>, List<AuthorDto>>(authors)
-            );
+                ObjectMapper.Map<List<Author>, List<AuthorPageListOutputDto>>(authors));
         }
 
         [Authorize(BookStorePermissions.Authors.Create)]

@@ -37,6 +37,12 @@ function configureRoutes(routesService: RoutesService) {
         layout: eLayoutType.application,
         requiredPolicy: 'BookStore.Authors',
       },
+      {
+        path: '/audit-logs',
+        name: '::Menu:AuditLogs',
+        parentName: '::Menu:BookStore',
+        layout: eLayoutType.application
+      },
     ]);
   };
 }

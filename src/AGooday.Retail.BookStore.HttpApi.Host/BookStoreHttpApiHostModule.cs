@@ -26,6 +26,7 @@ using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.Swashbuckle;
 using Volo.Abp.VirtualFileSystem;
+using Volo.Abp.Auditing;
 
 namespace AGooday.Retail.BookStore
 {
@@ -55,6 +56,7 @@ namespace AGooday.Retail.BookStore
             ConfigureRedis(context, configuration, hostingEnvironment);
             ConfigureCors(context, configuration);
             ConfigureSwaggerServices(context, configuration);
+            ConfigureAbpAuditing();
         }
 
         private static void ConfigureDbProperties()
@@ -168,6 +170,16 @@ namespace AGooday.Retail.BookStore
                     //#endregion 
                     #endregion
                 });
+        }
+        private void ConfigureAbpAuditing()
+        {
+            Configure<AbpAuditingOptions>(options =>
+            {
+                options.ApplicationName = "BookStoreAPI";
+                options.IsEnabledForGetRequests = true;
+                //options.IgnoredTypes.Add(typeof(Books.Book));
+                options.EntityHistorySelectors.AddAllEntities();
+            });
         }
 
         private void ConfigureLocalization()

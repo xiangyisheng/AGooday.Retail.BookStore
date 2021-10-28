@@ -32,6 +32,10 @@ const routes: Routes = [
   {
     path: 'authors',
     loadChildren: () => import('./author/author.module').then(m => m.AuthorModule),
+  },
+  {
+    path: 'audit-logs',
+    loadChildren: () => import('./audit-log/audit-log.module').then(m => m.AuditLogModule),
   }
 ];
 
