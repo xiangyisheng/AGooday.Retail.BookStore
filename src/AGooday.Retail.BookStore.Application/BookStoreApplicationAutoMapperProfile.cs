@@ -1,6 +1,8 @@
-﻿using AGooday.Retail.BookStore.Authors;
+﻿using AGooday.Retail.BookStore.AuditLogs;
+using AGooday.Retail.BookStore.Authors;
 using AGooday.Retail.BookStore.Books;
 using AutoMapper;
+using Volo.Abp.AuditLogging;
 
 namespace AGooday.Retail.BookStore
 {
@@ -38,6 +40,11 @@ namespace AGooday.Retail.BookStore
             CreateMap<Author, AuthorPageListOutputDto>();
 
             CreateMap<Author, AuthorLookupDto>();
+
+            CreateMap<AuditLog, AuditLogPageListOutputDto>();
+            CreateMap<EntityChange, EntityChangeDto>();
+            CreateMap<EntityPropertyChange, EntityPropertyChangeDto>();
+            CreateMap<AuditLogAction, AuditLogActionDto>();
         }
     }
 }

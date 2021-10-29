@@ -8,9 +8,9 @@
       </div>
       <div class="text-right col col-md-6">
         <div class="text-lg-right pt-2">
-          <button id="query" class="btn btn-primary" type="button" (click)="queryAuditLog()">
-            <i class="fa fa-plus mr-1"></i>
-            <span>{{ '::Query' | abpLocalization }}</span>
+          <button id="search" class="btn btn-primary" type="button" (click)="searchAuditLog()">
+            <i class="fa fa-search mr-1"></i>
+            <span>{{ '::Search' | abpLocalization }}</span>
           </button>
         </div>
       </div>
@@ -47,13 +47,13 @@
           </div>
         </ng-template>
       </ngx-datatable-column>
-      <ngx-datatable-column [name]="'::UserName' | abpLocalization" prop="UserName"></ngx-datatable-column>
-      <ngx-datatable-column [name]="'::HttpMethod' | abpLocalization" prop="HttpMethod"></ngx-datatable-column>
-      <ngx-datatable-column [name]="'::HttpStatusCode' | abpLocalization" prop="HttpStatusCode"></ngx-datatable-column>
-      <ngx-datatable-column [name]="'::Url' | abpLocalization" prop="Url"></ngx-datatable-column>
+      <ngx-datatable-column [name]="'::UserName' | abpLocalization" prop="userName"></ngx-datatable-column>
+      <ngx-datatable-column [name]="'::HttpMethod' | abpLocalization" prop="httpMethod"></ngx-datatable-column>
+      <ngx-datatable-column [name]="'::HttpStatusCode' | abpLocalization" prop="httpStatusCode"></ngx-datatable-column>
+      <ngx-datatable-column [name]="'::Url' | abpLocalization" prop="url"></ngx-datatable-column>
       <ngx-datatable-column [name]="'::ExecutionTime' | abpLocalization">
         <ng-template let-row="row" ngx-datatable-cell-template>
-          {{ row.ExecutionTime | date:'yyyy-MM-dd HH:mm:ss' }}
+          {{ row.executionTime | date:'yyyy-MM-dd HH:mm:ss' }}
         </ng-template>
       </ngx-datatable-column>
     </ngx-datatable>

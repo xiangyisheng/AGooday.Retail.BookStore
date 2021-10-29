@@ -1,11 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ListService, PagedResultDto } from '@abp/ng.core';
-import { AuditLogService, AuditLogDto } from '@proxy/auditLogs';
+import { AuditLogService, AuditLogDto } from '@proxy/audit-logs';
+import { NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
+import { DateAdapter } from '@abp/ng.theme.shared/extensions';
 
 @Component({
   selector: 'app-audit-log',
   templateUrl: './audit-log.component.html',
-  styleUrls: ['./audit-log.component.scss']
+  styleUrls: ['./audit-log.component.scss'],
+  providers: [ListService, { provide: NgbDateAdapter, useClass: DateAdapter }],
 })
 export class AuditLogComponent implements OnInit {
   auditLog = { items: [], totalCount: 0 } as PagedResultDto<AuditLogDto>;
@@ -24,8 +27,8 @@ export class AuditLogComponent implements OnInit {
     });
   }
 
-  queryAuditLog() {
-    console.log("queryAuditLog");
+  searchAuditLog() {
+    console.log("searchAuditLog");
   }
 
   viewAuditLog(id: string) {

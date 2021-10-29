@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using Volo.Abp.Application.Dtos;
 
 namespace AGooday.Retail.BookStore.AuditLogs
 {
-    public class AuditLogPageListOutputDto
+    public class AuditLogPageListOutputDto : EntityDto<Guid>
     {
         public string ApplicationName { get; set; }
 
@@ -41,5 +43,9 @@ namespace AGooday.Retail.BookStore.AuditLogs
         public string Comments { get; set; }
 
         public int? HttpStatusCode { get; set; }
+
+        public ICollection<EntityChangeDto> EntityChanges { get; set; }
+
+        public ICollection<AuditLogActionDto> Actions { get; set; }
     }
 }
