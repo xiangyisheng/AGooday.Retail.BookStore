@@ -1,23 +1,32 @@
 import type { EntityDto, PagedAndSortedResultRequestDto } from '@abp/ng.core';
 
 export interface AuditLogDto extends EntityDto<string> {
+  applicationName?: string;
+  userId?: string;
   userName?: string;
-  httpMethod?: string;
-  httpStatusCode?: string;
-  url?: string;
+  tenantId?: string;
+  tenantName?: string;
   executionTime?: string;
+  executionDuration?: string;
+  clientIpAddress?: string;
+  browserInfo?: string;
+  httpMethod?: string;
+  url?: string;
+  exceptions?: string;
+  comments?: string;
+  httpStatusCode?: number;
 }
 
 export interface GetAuditLogListDto extends PagedAndSortedResultRequestDto {
-  StartTime?: string;
-  EndTime?: string;
-  HttpMethod?: string;
-  Url?: string;
+  startTime?: string;
+  endTime?: string;
+  httpMethod?: string;
+  url?: string;
   userName?: string;
-  ApplicationName?: string;
-  CorrelationId?: string;
-  MaxExecutionDuration?: number;
-  MinExecutionDuration?: number;
-  HasException?: boolean;
-  HttpStatusCode?: number;
+  applicationName?: string;
+  correlationId?: string;
+  maxExecutionDuration?: number;
+  minExecutionDuration?: number;
+  hasException?: boolean;
+  httpStatusCode?: number;
 }

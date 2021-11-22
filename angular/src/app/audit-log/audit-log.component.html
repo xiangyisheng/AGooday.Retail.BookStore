@@ -47,15 +47,21 @@
           </div>
         </ng-template>
       </ngx-datatable-column>
-      <ngx-datatable-column [name]="'::UserName' | abpLocalization" prop="userName"></ngx-datatable-column>
-      <ngx-datatable-column [name]="'::HttpMethod' | abpLocalization" prop="httpMethod"></ngx-datatable-column>
-      <ngx-datatable-column [name]="'::HttpStatusCode' | abpLocalization" prop="httpStatusCode"></ngx-datatable-column>
-      <ngx-datatable-column [name]="'::Url' | abpLocalization" prop="url"></ngx-datatable-column>
-      <ngx-datatable-column [name]="'::ExecutionTime' | abpLocalization">
+      <ngx-datatable-column [name]="'::UserName' | abpLocalization" prop="userName" [minWidth] = "0" ></ngx-datatable-column>
+      <ngx-datatable-column [name]="'::TenantName' | abpLocalization" prop="tenantName" [minWidth] = "0"></ngx-datatable-column>
+      <ngx-datatable-column [name]="'::ExecutionTime' | abpLocalization" [minWidth] = "168">
         <ng-template let-row="row" ngx-datatable-cell-template>
           {{ row.executionTime | date:'yyyy-MM-dd HH:mm:ss' }}
         </ng-template>
       </ngx-datatable-column>
+      <ngx-datatable-column [name]="'::ExecutionDuration' | abpLocalization" prop="executionDuration" [minWidth] = "0"></ngx-datatable-column>
+      <ngx-datatable-column [name]="'::ClientIpAddress' | abpLocalization" prop="clientIpAddress" [minWidth] = "0"></ngx-datatable-column>
+      <ngx-datatable-column [name]="'::BrowserInfo' | abpLocalization" prop="browserInfo" [minWidth] = "500"></ngx-datatable-column>
+      <ngx-datatable-column [name]="'::HttpMethod' | abpLocalization" prop="httpMethod" [minWidth] = "0"></ngx-datatable-column>
+      <ngx-datatable-column [name]="'::Url' | abpLocalization" prop="url" [minWidth] = "200"></ngx-datatable-column>
+      <ngx-datatable-column [name]="'::Exceptions' | abpLocalization" prop="exceptions" [minWidth] = "0"></ngx-datatable-column>
+      <ngx-datatable-column [name]="'::Comments' | abpLocalization" prop="comments" [minWidth] = "0"></ngx-datatable-column>
+      <ngx-datatable-column [name]="'::HttpStatusCode' | abpLocalization" prop="httpStatusCode" [minWidth] = "0"></ngx-datatable-column>
     </ngx-datatable>
   </div>
 </div>
